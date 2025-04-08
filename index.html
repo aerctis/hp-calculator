@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HP Calculator</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f2f2f2;
+      border-radius: 10px;
+    }
+    input {
+      width: 100%; margin: 5px 0 15px 0; padding: 8px;
+    }
+    button {
+      width: 100%; padding: 10px; font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Tower of God HP Calculator</h2>
+  <label>Strength: <input type="number" id="str"></label>
+  <label>Shinsu Endurance: <input type="number" id="se"></label>
+  <label>Willpower: <input type="number" id="will"></label>
+  <label>Level: <input type="number" id="lvl"></label>
+  <button onclick="calcHP()">Calculate</button>
+  <p id="output"></p>
+
+  <script>
+    function calcHP() {
+      const str = +document.getElementById("str").value;
+      const se = +document.getElementById("se").value;
+      const will = +document.getElementById("will").value;
+      const lvl = +document.getElementById("lvl").value;
+
+      let perLvl =
+        lvl <= 10 ? 2 :
+        lvl <= 25 ? 3 :
+        lvl <= 50 ? 4 :
+        lvl <= 80 ? 5 :
+        lvl <= 110 ? 6 :
+        lvl <= 140 ? 7 :
+        lvl <= 170 ? 8 : 9;
+
+      const hp = (str * 2) + (se * 3) + (will * 1.5) + (lvl * perLvl);
+      document.getElementById("output").textContent = `Max HP: ${Math.floor(hp)}`;
+    }
+  </script>
+</body>
+</html>
