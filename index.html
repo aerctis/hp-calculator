@@ -42,7 +42,14 @@
         lvl <= 80 ? 5 :
         lvl <= 110 ? 6 :
         lvl <= 140 ? 7 :
-        lvl <= 170 ? 8 : 9;
+        lvl <= 170 ? 8 :
+        lvl <= 200 ? 9 :
+        lvl <= 230 ? 10 :
+        lvl <= 260 ? 11 :
+        lvl <= 290 ? 12 :
+        lvl <= 310 ? 13 :
+        lvl <= 340 ? 14 :
+        lvl <= 370 ? 15 : 16
 
       const hp = (str * 2) + (se * 3) + (will * 1.5) + (lvl * perLvl);
       document.getElementById("output").textContent = `Max HP: ${Math.floor(hp)}`;
