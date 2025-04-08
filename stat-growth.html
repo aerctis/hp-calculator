@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expected Stat Growth</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f4f4f4;
+      border-radius: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      font-weight: bold;
+    }
+    h2, h4 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h2>Expected Stat Growth Calculator</h2>
+
+  <label for="position">Position:</label>
+  <select id="position">
+    <option value="Guide">Guide</option>
+    <option value="Fisherman">Fisherman</option>
+    <option value="Spear Bearer">Spear Bearer</option>
+    <option value="Wave Controller">Wave Controller</option>
+    <option value="Light Bearer">Light Bearer</option>
+    <option value="Anima">Anima</option>
+  </select>
+
+  <label for="level">Level (1–200):</label>
+  <input type="number" id="level" min="1" max="200">
+
+  <button onclick="calculateGrowth()">Calculate Expected Stats</button>
+
+  <div id="result"></div>
+
+  <script>
+    const tierSets = {
+      "Guide": [
+        { range: [1, 10], primary: 1, secondary: 0.5, tertiary: 0.5, free: 2 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
+        { range: [26, 50], primary: 1.5, secondary: 1, tertiary: 0.5, free: 4 },
+        { range: [51, 80], primary: 2, secondary: 1.5, tertiary: 1, free: 5 },
+        { range: [81, 110], primary: 2.5, secondary: 2, tertiary: 1, free: 6 },
+        { range: [111, 140], primary: 3, secondary: 2, tertiary: 1.5, free: 7 },
+        { range: [141, 170], primary: 3, secondary: 2.5, tertiary: 2, free: 8 },
+        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 10 }
+      ],
+      "Fisherman": [
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
+        { range: [51, 80], primary: 2, secondary: 2, tertiary: 1, free: 5 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
+        { range: [111, 140], primary: 3, secondary: 2, tertiary: 2, free: 7 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
+        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 10 }
+      ],
+      "Spear Bearer": [
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
+        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 5 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
+        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 7 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
+        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 10 }
+      ],
+      "Wave Controller": [
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
+        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 5 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
+        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 7 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
+        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 10 }
+      ],
+      "Light Bearer": [
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
+        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 5 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
+        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 7 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
+        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 10 }
+      ],
+      "Anima": [
+        { range: [1, 10], primary: 2, secondary: 1, tertiary: 0.5, free: 2 },
+        { range: [11, 25], primary: 2.5, secondary: 1, tertiary: 0.5, free: 3 },
+        { range: [26, 50], primary: 3, secondary: 1, tertiary: 0.5, free: 4 },
+        { range: [51, 80], primary: 4, secondary: 1, tertiary: 1, free: 5 },
+        { range: [81, 110], primary: 5, secondary: 1, tertiary: 1, free: 6 },
+        { range: [111, 140], primary: 6, secondary: 1, tertiary: 1, free: 7 },
+        { range: [141, 170], primary: 7, secondary: 1, tertiary: 1, free: 8 },
+        { range: [171, 200], primary: 8, secondary: 1, tertiary: 1, free: 10 }
+      ]
+    };
+
+    const positions = {
+      "Guide": {
+        primary: ["Perception", "Insight"],
+        secondary: ["Willpower", "Shinsu Control", "Shinsu Endurance"],
+        tertiary: ["Strength", "Technique", "Authority"]
+      },
+      "Fisherman": {
+        primary: ["Strength", "Technique", "Perception"],
+        secondary: ["Shinsu Endurance", "Insight"],
+        tertiary: ["Willpower", "Shinsu Control", "Authority"]
+      },
+      "Spear Bearer": {
+        primary: ["Strength", "Perception"],
+        secondary: ["Technique", "Insight", "Shinsu Endurance"],
+        tertiary: ["Willpower", "Shinsu Control", "Authority"]
+      },
+      "Wave Controller": {
+        primary: ["Shinsu Control", "Shinsu Endurance"],
+        secondary: ["Willpower", "Insight", "Technique"],
+        tertiary: ["Strength", "Perception", "Authority"]
+      },
+      "Light Bearer": {
+        primary: ["Insight", "Authority"],
+        secondary: ["Perception", "Shinsu Control", "Willpower"],
+        tertiary: ["Strength", "Technique", "Shinsu Endurance"]
+      },
+      "Anima": {
+        primary: ["Authority"],
+        secondary: ["Shinsu Control", "Insight", "Willpower", "Shinsu Endurance"],
+        tertiary: ["Strength", "Perception", "Technique"]
+      }
+    };
+
+    const allStats = [
+      "Strength", "Shinsu Control", "Shinsu Endurance",
+      "Perception", "Willpower", "Technique", "Insight", "Authority"
+    ];
+
+    function calculateGrowth() {
+      const level = parseInt(document.getElementById("level").value);
+      const pos = document.getElementById("position").value;
+      if (isNaN(level) || level < 1 || level > 200) {
+        document.getElementById("result").innerHTML = "<p>Please enter a valid level between 1 and 200.</p>";
+        return;
+      }
+
+      const tiers = positions[pos];
+      const tierData = tierSets[pos] || tierSets["default"];
+      let statTotals = {};
+      allStats.forEach(stat => statTotals[stat] = 0);
+      let freePoints = 0;
+
+      for (let i = 1; i <= level; i++) {
+        const tier = tierData.find(t => i >= t.range[0] && i <= t.range[1]);
+        freePoints += tier.free;
+        tiers.primary.forEach(stat => statTotals[stat] += tier.primary);
+        tiers.secondary.forEach(stat => statTotals[stat] += tier.secondary);
+        tiers.tertiary.forEach(stat => statTotals[stat] += tier.tertiary);
+      }
+
+      let html = `<h4>Expected Stats at Level ${level} (Position: ${pos})</h4>`;
+      html += `<table><tr><th>Stat</th><th>Expected Value</th></tr>`;
+      allStats.forEach(stat => {
+        html += `<tr><td>${stat}</td><td>${statTotals[stat].toFixed(1)}</td></tr>`;
+      });
+      html += `</table>`;
+      html += `<p style=\"text-align:center;\"><b>Total Free Stat Points Earned:</b> ${freePoints}</p>`;
+
+      document.getElementById("result").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
