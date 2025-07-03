@@ -84,64 +84,64 @@
   <script>
     const tierSets = {
       "Guide": [
-        { range: [1, 10], primary: 1, secondary: 0.5, tertiary: 0.5, free: 2 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
-        { range: [26, 50], primary: 1.5, secondary: 1, tertiary: 0.5, free: 4 },
-        { range: [51, 80], primary: 2, secondary: 1.5, tertiary: 1, free: 5 },
-        { range: [81, 110], primary: 2.5, secondary: 2, tertiary: 1, free: 6 },
-        { range: [111, 140], primary: 3, secondary: 2, tertiary: 1.5, free: 7 },
-        { range: [141, 170], primary: 3, secondary: 2.5, tertiary: 2, free: 8 },
-        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 10 }
+        { range: [1, 10], primary: 1, secondary: 0.5, tertiary: 0.5, free: 1 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [26, 50], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [51, 80], primary: 2, secondary: 1.5, tertiary: 1, free: 1 },
+        { range: [81, 110], primary: 2.5, secondary: 2, tertiary: 1, free: 1 },
+        { range: [111, 140], primary: 3, secondary: 2, tertiary: 1.5, free: 2 },
+        { range: [141, 170], primary: 3, secondary: 2.5, tertiary: 2, free: 2 },
+        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 2 }
       ],
       "Fisherman": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
-        { range: [51, 80], primary: 2, secondary: 2, tertiary: 1, free: 5 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
-        { range: [111, 140], primary: 3, secondary: 2, tertiary: 2, free: 7 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
-        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 10 }
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [51, 80], primary: 2, secondary: 2, tertiary: 1, free: 1 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
+        { range: [111, 140], primary: 3, secondary: 2, tertiary: 2, free: 2 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
+        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 2 }
       ],
       "Spear Bearer": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
-        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 5 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
-        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 7 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
-        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 10 }
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 1 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
+        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
+        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 2 }
       ],
       "Wave Controller": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
-        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 5 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
-        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 7 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
-        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 10 }
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 1 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
+        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
+        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 2 }
       ],
       "Light Bearer": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 2 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 3 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 4 },
-        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 5 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 6 },
-        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 7 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 8 },
-        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 10 }
+        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 1 },
+        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
+        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
+        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
+        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 2 }
       ],
       "Anima": [
-        { range: [1, 10], primary: 2, secondary: 1, tertiary: 0.5, free: 2 },
-        { range: [11, 25], primary: 2.5, secondary: 1, tertiary: 0.5, free: 3 },
-        { range: [26, 50], primary: 3, secondary: 1, tertiary: 0.5, free: 4 },
-        { range: [51, 80], primary: 3.5, secondary: 1.5, tertiary: 1, free: 5 },
-        { range: [81, 110], primary: 4, secondary: 1.5, tertiary: 1, free: 6 },
-        { range: [111, 140], primary: 5, secondary: 2, tertiary: 1.5, free: 7 },
-        { range: [141, 170], primary: 6, secondary: 2, tertiary: 1.5, free: 8 },
-        { range: [171, 200], primary: 6.5, secondary: 2, tertiary: 2, free: 10 }
+        { range: [1, 10], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [11, 25], primary: 2.5, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [26, 50], primary: 3, secondary: 1, tertiary: 0.5, free: 1 },
+        { range: [51, 80], primary: 3.5, secondary: 1.5, tertiary: 1, free: 1 },
+        { range: [81, 110], primary: 4, secondary: 1.5, tertiary: 1, free: 1 },
+        { range: [111, 140], primary: 5, secondary: 2, tertiary: 1.5, free: 2 },
+        { range: [141, 170], primary: 6, secondary: 2, tertiary: 1.5, free: 2 },
+        { range: [171, 200], primary: 6.5, secondary: 2, tertiary: 2, free: 2 }
       ]
     };
 
