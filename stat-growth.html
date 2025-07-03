@@ -73,8 +73,8 @@
       <option value="Anima">Anima</option>
     </select>
 
-    <label for="level">Level (1–200):</label>
-    <input type="number" id="level" min="1" max="200">
+    <label for="level">Level:</label>
+    <input type="number" id="level" min="1">
 
     <button onclick="calculateGrowth()">Calculate Expected Stats</button>
 
@@ -91,7 +91,7 @@
         { range: [81, 110], primary: 2.5, secondary: 2, tertiary: 1, free: 1 },
         { range: [111, 140], primary: 3, secondary: 2, tertiary: 1.5, free: 2 },
         { range: [141, 170], primary: 3, secondary: 2.5, tertiary: 2, free: 2 },
-        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 2 }
+        { range: [171, Infinity], primary: 4, secondary: 3, tertiary: 3, free: 2 }
       ],
       "Fisherman": [
         { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
@@ -101,7 +101,7 @@
         { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
         { range: [111, 140], primary: 3, secondary: 2, tertiary: 2, free: 2 },
         { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, 200], primary: 4, secondary: 3, tertiary: 3, free: 2 }
+        { range: [171, Infinity], primary: 4, secondary: 3, tertiary: 3, free: 2 }
       ],
       "Spear Bearer": [
         { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
@@ -111,7 +111,7 @@
         { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
         { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
         { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 2 }
+        { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2, free: 2 }
       ],
       "Wave Controller": [
         { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
@@ -121,7 +121,7 @@
         { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
         { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
         { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 2 }
+        { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2, free: 2 }
       ],
       "Light Bearer": [
         { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
@@ -131,7 +131,7 @@
         { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
         { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
         { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, 200], primary: 5, secondary: 3, tertiary: 2, free: 2 }
+        { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2, free: 2 }
       ],
       "Anima": [
         { range: [1, 10], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
@@ -141,7 +141,7 @@
         { range: [81, 110], primary: 4, secondary: 1.5, tertiary: 1, free: 1 },
         { range: [111, 140], primary: 5, secondary: 2, tertiary: 1.5, free: 2 },
         { range: [141, 170], primary: 6, secondary: 2, tertiary: 1.5, free: 2 },
-        { range: [171, 200], primary: 6.5, secondary: 2, tertiary: 2, free: 2 }
+        { range: [171, Infinity], primary: 6, secondary: 2, tertiary: 2, free: 2 }
       ]
     };
 
@@ -186,8 +186,8 @@
     function calculateGrowth() {
       const level = parseInt(document.getElementById("level").value);
       const pos = document.getElementById("position").value;
-      if (isNaN(level) || level < 1 || level > 200) {
-        document.getElementById("result").innerHTML = "<p>Please enter a valid level between 1 and 200.</p>";
+      if (isNaN(level) || level < 1) {
+        document.getElementById("result").innerHTML = "<p>Please enter a valid level.</p>";
         return;
       }
 
