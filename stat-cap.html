@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Max Stat Cap Calculator</title>
+  <title>Stats Validator</title>
   <style>
     body {
       font-family: Arial;
@@ -24,16 +24,25 @@
     h2, h4 {
       text-align: center;
     }
+    .result-success {
+      color: #28a745;
+      font-weight: bold;
+    }
+    .result-error {
+      color: #dc3545;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <div style="background: #333; padding: 10px 0; text-align: center;">
-  <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none;">HP Calculator</a>
-  <a href="stat-cap.html" style="color: white; margin: 0 15px; text-decoration: none;">Max Stat Calculator</a>
-  <a href="stat-growth.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats For Level</a>
+    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none;">HP Calculator</a>
+    <a href="stat-cap.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats Validator</a>
+    <a href="stat-allocator.html" style="color: white; margin: 0 15px; text-decoration: none;">Stat Point Allocator</a>
+    <a href="stat-growth.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats For Level</a>
   </div>
 
-  <h2>Max Allowed Stat Calculator</h2>
+  <h2>Stats Validator</h2>
   <h4>Enter your current stats</h4>
 
   <label>Strength:</label>
@@ -56,12 +65,11 @@
   <label>Multiplier (default 1.5):</label>
   <input type="number" id="mult" value="1.5" step="0.01">
 
-  <button onclick="calcCap()">Calculate Max Stat</button>
-
+  <button onclick="validateStats()">Validate Stats</button>
   <p id="result" style="text-align:center; font-size: 1.2em; margin-top: 20px;"></p>
 
   <script>
-    function calcCap() {
+    function validateStats() {
       const stats = [
         +document.getElementById('str').value,
         +document.getElementById('sc').value,
@@ -73,17 +81,27 @@
         +document.getElementById('auth').value
       ];
 
-      const validStats = stats.filter(s => !isNaN(s));
+      const resultEl = document.getElementById("result");
+      const validStats = stats.filter(s => !isNaN(s) && s > 0);
+      
       if (validStats.length === 0) {
-        document.getElementById("result").textContent = "Please enter at least one stat.";
+        resultEl.className = 'result-error';
+        resultEl.textContent = "Please enter at least one stat.";
         return;
       }
 
       const average = validStats.reduce((a, b) => a + b, 0) / validStats.length;
       const multiplier = parseFloat(document.getElementById("mult").value) || 1.5;
       const cap = average * multiplier;
+      const highestStat = Math.max(...validStats);
 
-      document.getElementById("result").textContent = `Your max allowed stat is: ${cap.toFixed(2)}`;
+      if (highestStat <= cap) {
+        resultEl.className = 'result-success';
+        resultEl.innerHTML = 'Your stats are valid';
+      } else {
+        resultEl.className = 'result-error';
+        resultEl.innerHTML = `Your stats exceed the cap!<br>Your highest stat is ${highestStat.toFixed(2)}, but the cap is ${cap.toFixed(2)}.`;
+      }
     }
   </script>
 </body>
