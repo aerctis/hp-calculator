@@ -7,13 +7,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .navbar {
+            background: #333;
+            padding: 15px 10px;
+            text-align: center;
+        }
+        .navbar a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .container {
             max-width: 800px;
             margin: 40px auto;
             padding: 20px;
-            background: #f4f4f4;
+            background: #fff;
             border-radius: 10px;
-        }
-        .container {
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -57,15 +70,25 @@
             min-width: 50px;
             text-align: center;
         }
-        .add-buttons button {
+        /* CHANGED: Combined button styles */
+        .action-buttons button {
             margin-left: 5px;
             padding: 5px 10px;
             cursor: pointer;
             border: 1px solid #ccc;
             border-radius: 4px;
+            min-width: 40px;
         }
-        .add-buttons button:hover {
+        .action-buttons button:hover {
             background-color: #e0e0e0;
+        }
+        /* ADDED: Specific color for decrease buttons */
+        .decrease-buttons button {
+            background-color: #fdecec;
+            border-color: #f5c6cb;
+        }
+        .decrease-buttons button:hover {
+            background-color: #f8d7da;
         }
         .points-display {
             text-align: center;
@@ -91,11 +114,11 @@
 </head>
 <body>
 
-    <div style="background: #333; padding: 10px 0; text-align: center; margin-bottom: 20px;">
-        <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none;">HP Calculator</a>
-        <a href="stat-cap.html" style="color: white; margin: 0 15px; text-decoration: none;">Stat Cap Validator</a>
-        <a href="stat-allocator.html" style="color: white; margin: 0 15px; text-decoration: none;">Stat Point Allocator</a>
-        <a href="stat-growth.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats For Level</a>
+    <div class="navbar">
+        <a href="index.html">HP Calculator</a>
+        <a href="stat-cap.html">Stat Cap Validator</a>
+        <a href="stat-allocator.html">Stat Point Allocator</a>
+        <a href="stat-growth.html">Stats For Level</a>
     </div>
 
     <div class="container">
@@ -140,22 +163,25 @@
         const remainingPointsEl = document.getElementById('remaining-points');
         const messageBox = document.getElementById('message-box');
 
-        // Initialize UI
         window.onload = () => {
             stats.forEach(stat => {
                 const row = document.createElement('div');
                 row.className = 'stat-row';
+                // CHANGED: Added decrease buttons
                 row.innerHTML = `
                     <label for="${stat.id}">${stat.name}:</label>
                     <div class="stat-values">
                         <input type="number" id="${stat.id}" value="10" class="base-stat">
                         <span class="current-stat" id="${stat.id}-current">10</span>
-                        <div class="add-buttons">
+                        <div class="action-buttons">
                             <button onclick="increaseStat('${stat.id}', 1)">+1</button>
                             <button onclick="increaseStat('${stat.id}', 5)">+5</button>
                             <button onclick="increaseStat('${stat.id}', 10)">+10</button>
-                            <button onclick="increaseStat('${stat.id}', 25)">+25</button>
-                            <button onclick="increaseStat('${stat.id}', 50)">+50</button>
+                        </div>
+                        <div class="action-buttons decrease-buttons">
+                            <button onclick="decreaseStat('${stat.id}', 1)">-1</button>
+                            <button onclick="decreaseStat('${stat.id}', 5)">-5</button>
+                            <button onclick="decreaseStat('${stat.id}', 10)">-10</button>
                         </div>
                     </div>
                 `;
@@ -168,12 +194,14 @@
             document.querySelectorAll('.base-stat').forEach(input => {
                 input.addEventListener('change', updateFromInputs);
             });
+            document.getElementById('multiplier').addEventListener('change', clearMessage);
         };
 
         function updateFromInputs() {
-            remainingPointsEl.textContent = freePointsInput.value;
+            const freePoints = parseInt(freePointsInput.value) || 0;
+            remainingPointsEl.textContent = freePoints;
             stats.forEach(stat => {
-                const baseValue = document.getElementById(stat.id).value;
+                const baseValue = document.getElementById(stat.id).value || 0;
                 document.getElementById(`${stat.id}-current`).textContent = baseValue;
             });
             clearMessage();
@@ -189,7 +217,7 @@
             if (statValue <= 349) return 10;
             if (statValue <= 399) return 12;
             if (statValue <= 449) return 15;
-            return 20; // 450+
+            return 20;
         }
 
         function showMessage(text, type = 'error') {
@@ -222,7 +250,6 @@
 
                 const average = statSum / statCount;
                 const cap = average * multiplier;
-                
                 const targetStatValue = currentStatValues[statId];
 
                 if (targetStatValue + 1 > cap) {
@@ -231,17 +258,37 @@
                 }
 
                 const cost = getCost(targetStatValue);
-
                 if (remainingPoints < cost) {
                     showMessage("Not enough remaining points.");
                     return;
                 }
 
                 remainingPoints -= cost;
-                currentStatValues[statId]++;
+                statCurrentEl.textContent = targetStatValue + 1;
+                remainingPointsEl.textContent = remainingPoints;
+            }
+        }
 
-                // Update UI after a successful point allocation
-                statCurrentEl.textContent = currentStatValues[statId];
+        // ADDED: New function to decrease stats and refund points
+        function decreaseStat(statId, amount) {
+            clearMessage();
+            let remainingPoints = parseInt(remainingPointsEl.textContent);
+            const statCurrentEl = document.getElementById(`${statId}-current`);
+            const baseStatEl = document.getElementById(statId);
+
+            for (let i = 0; i < amount; i++) {
+                const currentStatValue = parseInt(statCurrentEl.textContent);
+                const baseStatValue = parseInt(baseStatEl.value);
+
+                if (currentStatValue <= baseStatValue) {
+                    showMessage("Cannot decrease stat below its base value.");
+                    return;
+                }
+
+                const refund = getCost(currentStatValue - 1);
+                remainingPoints += refund;
+                
+                statCurrentEl.textContent = currentStatValue - 1;
                 remainingPointsEl.textContent = remainingPoints;
             }
         }
