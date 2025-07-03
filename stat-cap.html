@@ -1,20 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Stats Validator</title>
+  <title>Stat Cap Validator</title>
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+    .navbar {
+      background: #333;
+      padding: 15px 10px;
+      text-align: center;
+    }
+    .navbar a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .container {
       max-width: 500px;
       margin: 40px auto;
       padding: 20px;
-      background: #f4f4f4;
+      background: #fff;
       border-radius: 10px;
     }
     input {
       width: 100%;
       padding: 8px;
       margin-bottom: 10px;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -35,38 +51,41 @@
   </style>
 </head>
 <body>
-  <div style="background: #333; padding: 10px 0; text-align: center;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none;">HP Calculator</a>
-    <a href="stat-cap.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats Validator</a>
-    <a href="stat-allocator.html" style="color: white; margin: 0 15px; text-decoration: none;">Stat Point Allocator</a>
-    <a href="stat-growth.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats For Level</a>
+  <div class="navbar">
+    <a href="index.html">HP Calculator</a>
+    <a href="stat-cap.html">Stat Cap Validator</a>
+    <a href="stat-allocator.html">Stat Point Allocator</a>
+    <a href="stat-growth.html">Stats For Level</a>
   </div>
 
-  <h2>Stats Validator</h2>
-  <h4>Enter your current stats</h4>
+  <div class="container">
+    <h2>Stat Cap Validator</h2>
+    <h4>Enter your current stats to check if they are within the cap.</h4>
 
-  <label>Strength:</label>
-  <input type="number" id="str">
-  <label>Shinsu Control:</label>
-  <input type="number" id="sc">
-  <label>Shinsu Endurance:</label>
-  <input type="number" id="se">
-  <label>Perception:</label>
-  <input type="number" id="perc">
-  <label>Willpower:</label>
-  <input type="number" id="will">
-  <label>Technique:</label>
-  <input type="number" id="tech">
-  <label>Insight:</label>
-  <input type="number" id="insight">
-  <label>Authority:</label>
-  <input type="number" id="auth">
+    <label>Strength:</label>
+    <input type="number" id="str">
+    <label>Shinsu Control:</label>
+    <input type="number" id="sc">
+    <label>Shinsu Endurance:</label>
+    <input type="number" id="se">
+    <label>Perception:</label>
+    <input type="number" id="perc">
+    <label>Willpower:</label>
+    <input type="number" id="will">
+    <label>Technique:</label>
+    <input type="number" id="tech">
+    <label>Insight:</label>
+    <input type="number" id="insight">
+    <label>Authority:</label>
+    <input type="number" id="auth">
 
-  <label>Multiplier (default 1.5):</label>
-  <input type="number" id="mult" value="1.5" step="0.01">
+    <label>Multiplier (default 1.5):</label>
+    <input type="number" id="mult" value="1.5" step="0.01">
 
-  <button onclick="validateStats()">Validate Stats</button>
-  <p id="result" style="text-align:center; font-size: 1.2em; margin-top: 20px;"></p>
+    <button onclick="validateStats()">Validate Stats</button>
+
+    <p id="result" style="text-align:center; font-size: 1.2em; margin-top: 20px;"></p>
+  </div>
 
   <script>
     function validateStats() {
@@ -97,7 +116,7 @@
 
       if (highestStat <= cap) {
         resultEl.className = 'result-success';
-        resultEl.innerHTML = 'Your stats are valid';
+        resultEl.innerHTML = `Your stats are valid.`;
       } else {
         resultEl.className = 'result-error';
         resultEl.innerHTML = `Your stats exceed the cap!<br>Your highest stat is ${highestStat.toFixed(2)}, but the cap is ${cap.toFixed(2)}.`;
