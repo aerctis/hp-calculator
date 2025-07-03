@@ -5,16 +5,32 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+    .navbar {
+      background: #333;
+      padding: 15px 10px;
+      text-align: center;
+    }
+    .navbar a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .container {
       max-width: 700px;
       margin: 40px auto;
       padding: 20px;
-      background: #f4f4f4;
+      background: #fff;
       border-radius: 10px;
     }
     input, select {
       width: 100%;
       padding: 8px;
       margin-bottom: 10px;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -37,30 +53,33 @@
   </style>
 </head>
 <body>
-  <div style="background: #333; padding: 10px 0; text-align: center;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none;">HP Calculator</a>
-    <a href="stat-cap.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats Validator</a>
-    <a href="stat-allocator.html" style="color: white; margin: 0 15px; text-decoration: none;">Stat Point Allocator</a>
-    <a href="stat-growth.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats For Level</a>
+  <div class="navbar">
+    <a href="index.html">HP Calculator</a>
+    <a href="stat-cap.html">Stat Cap Validator</a>
+    <a href="stat-allocator.html">Stat Point Allocator</a>
+    <a href="stat-growth.html">Stats For Level</a>
   </div>
-  <h2>Expected Stat Growth Calculator</h2>
 
-  <label for="position">Position:</label>
-  <select id="position">
-    <option value="Guide">Guide</option>
-    <option value="Fisherman">Fisherman</option>
-    <option value="Spear Bearer">Spear Bearer</option>
-    <option value="Wave Controller">Wave Controller</option>
-    <option value="Light Bearer">Light Bearer</option>
-    <option value="Anima">Anima</option>
-  </select>
+  <div class="container">
+    <h2>Expected Stat Growth Calculator</h2>
 
-  <label for="level">Level (1–200):</label>
-  <input type="number" id="level" min="1" max="200">
+    <label for="position">Position:</label>
+    <select id="position">
+      <option value="Guide">Guide</option>
+      <option value="Fisherman">Fisherman</option>
+      <option value="Spear Bearer">Spear Bearer</option>
+      <option value="Wave Controller">Wave Controller</option>
+      <option value="Light Bearer">Light Bearer</option>
+      <option value="Anima">Anima</option>
+    </select>
 
-  <button onclick="calculateGrowth()">Calculate Expected Stats</button>
+    <label for="level">Level (1–200):</label>
+    <input type="number" id="level" min="1" max="200">
 
-  <div id="result"></div>
+    <button onclick="calculateGrowth()">Calculate Expected Stats</button>
+
+    <div id="result"></div>
+  </div>
 
   <script>
     const tierSets = {
@@ -192,7 +211,7 @@
         html += `<tr><td>${stat}</td><td>${statTotals[stat].toFixed(1)}</td></tr>`;
       });
       html += `</table>`;
-      html += `<p style=\"text-align:center;\"><b>Total Free Stat Points Earned:</b> ${freePoints}</p>`;
+      html += `<p style="text-align:center;"><b>Total Free Stat Points Earned:</b> ${freePoints}</p>`;
 
       document.getElementById("result").innerHTML = html;
     }
