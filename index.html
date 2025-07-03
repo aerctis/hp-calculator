@@ -4,36 +4,58 @@
   <title>HP Calculator</title>
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+    .navbar {
+      background: #333;
+      padding: 15px 10px;
+      text-align: center;
+    }
+    .navbar a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .container {
       max-width: 500px;
-      margin: 50px auto;
+      margin: 40px auto;
       padding: 20px;
-      background: #f2f2f2;
+      background: #fff;
       border-radius: 10px;
     }
     input {
-      width: 100%; margin: 5px 0 15px 0; padding: 8px;
+      width: 100%; 
+      margin: 5px 0 15px 0; 
+      padding: 8px;
+      box-sizing: border-box;
     }
     button {
-      width: 100%; padding: 10px; font-weight: bold;
+      width: 100%; 
+      padding: 10px; 
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div style="background: #333; padding: 10px 0; text-align: center;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none;">HP Calculator</a>
-    <a href="stat-cap.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats Validator</a>
-    <a href="stat-allocator.html" style="color: white; margin: 0 15px; text-decoration: none;">Stat Point Allocator</a>
-    <a href="stat-growth.html" style="color: white; margin: 0 15px; text-decoration: none;">Stats For Level</a>
+  <div class="navbar">
+    <a href="index.html">HP Calculator</a>
+    <a href="stat-cap.html">Stat Cap Validator</a>
+    <a href="stat-allocator.html">Stat Point Allocator</a>
+    <a href="stat-growth.html">Stats For Level</a>
   </div>
 
-  <h2>Max HP Calculator</h2>
-  <label>Strength: <input type="number" id="str"></label>
-  <label>Shinsu Endurance: <input type="number" id="se"></label>
-  <label>Willpower: <input type="number" id="will"></label>
-  <label>Level: <input type="number" id="lvl"></label>
-  <button onclick="calcHP()">Calculate</button>
-  <p id="output"></p>
+  <div class="container">
+    <h2>Max HP Calculator</h2>
+    <label>Strength: <input type="number" id="str"></label>
+    <label>Shinsu Endurance: <input type="number" id="se"></label>
+    <label>Willpower: <input type="number" id="will"></label>
+    <label>Level: <input type="number" id="lvl"></label>
+    <button onclick="calcHP()">Calculate</button>
+    <p id="output" style="text-align:center; font-size: 1.2em; margin-top: 20px;"></p>
+  </div>
 
   <script>
     function calcHP() {
