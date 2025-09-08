@@ -1,220 +1,385 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Expected Stat Growth</title>
+  <title>Character Sheet</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background: #f4f4f4;
       margin: 0;
-    }
-    .navbar {
-      background: #333;
-      padding: 15px 10px;
-      text-align: center;
-    }
-    .navbar a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      white-space: nowrap;
+      padding: 20px;
     }
     .container {
-      max-width: 700px;
-      margin: 40px auto;
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
       padding: 20px;
-      background: #fff;
-      border-radius: 10px;
+      border-radius: 8px;
     }
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      font-weight: bold;
-    }
-    h2, h4 {
+    h2 {
       text-align: center;
     }
-    table {
+    .row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .col {
+      flex: 1 1 45%;
+      margin: 10px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input[type=text], input[type=number], select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .stats-table, .skills-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 10px;
     }
-    th, td {
+    .stats-table th, .stats-table td, .skills-table th, .skills-table td {
       border: 1px solid #ccc;
-      padding: 8px;
+      padding: 6px;
       text-align: center;
+    }
+    .btn-row button {
+      margin-right: 10px;
+    }
+    #hp-speed {
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+    .affinities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 5px;
+    }
+    .affinities div {
+      background-color: #e3e3e3;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <a href="index.html">HP Calculator</a>
-    <a href="stat-cap.html">Stat Cap Validator</a>
-    <a href="stat-allocator.html">Stat Point Allocator</a>
-    <a href="stat-growth.html">Stats For Level</a>
-  </div>
-
   <div class="container">
-    <h2>Expected Stat Growth Calculator</h2>
+    <h2>Character Sheet</h2>
 
-    <label for="position">Position:</label>
-    <select id="position">
-      <option value="Guide">Guide</option>
-      <option value="Fisherman">Fisherman</option>
-      <option value="Spear Bearer">Spear Bearer</option>
-      <option value="Wave Controller">Wave Controller</option>
-      <option value="Light Bearer">Light Bearer</option>
-      <option value="Anima">Anima</option>
-    </select>
+    <div class="row">
+      <div class="col">
+        <label>Name</label>
+        <input type="text" id="char-name">
 
-    <label for="level">Level:</label>
-    <input type="number" id="level" min="1">
+        <label>Race</label>
+        <input type="text" id="char-race">
 
-    <button onclick="calculateGrowth()">Calculate Expected Stats</button>
+        <label>Position</label>
+        <select id="char-position" onchange="updateFromTextbox()">
+          <option value="Guide">Guide</option>
+          <option value="Fisherman">Fisherman</option>
+          <option value="Spear Bearer">Spear Bearer</option>
+          <option value="Wave Controller">Wave Controller</option>
+          <option value="Light Bearer">Light Bearer</option>
+          <option value="Anima">Anima</option>
+        </select>
 
-    <div id="result"></div>
+        <label>Primary Stats</label>
+        <div class="affinities" id="primary-affinities"></div>
+        <select id="add-primary"></select>
+
+        <label>Secondary Stats</label>
+        <div class="affinities" id="secondary-affinities"></div>
+        <select id="add-secondary"></select>
+
+        <label>Tertiary Stats</label>
+        <div class="affinities" id="tertiary-affinities"></div>
+        <select id="add-tertiary"></select>
+
+        <label>Level</label>
+        <input type="number" id="char-level" min="1" value="1" onchange="updateFromTextbox()">
+
+        <label>Floor</label>
+        <input type="number" id="char-floor" min="1" value="1" onchange="renderHpSpeed()">
+
+        <label>Stat Point Multiplier</label>
+        <input type="number" id="stat-multiplier" min="1" step="0.1" value="1.5">
+      </div>
+
+      <div class="col">
+        <label>Available Stat Points</label>
+        <input type="number" id="available-stat-points" value="0" readonly>
+
+        <label>Available Skill Points</label>
+        <input type="number" id="available-skill-points" value="0" readonly>
+
+        <div class="btn-row">
+          <button onclick="levelUp()">Level Up</button>
+          <button onclick="addSkillPoint()">+1 Skill Point</button>
+        </div>
+
+        <div class="btn-row">
+          <button onclick="addSkillSlot(1)">+ Tier 1 Slot</button>
+          <button onclick="addSkillSlot(2)">+ Tier 2 Slot</button>
+          <button onclick="addSkillSlot(3)">+ Tier 3 Slot</button>
+          <button onclick="addSkillSlot(4)">+ Tier 4 Slot</button>
+          <button onclick="addSkillSlot(5)">+ Tier 5 Slot</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="hp-speed"></div>
+
+    <h3>Stats</h3>
+    <table class="stats-table" id="stats-table">
+      <thead>
+        <tr>
+          <th>Stat</th>
+          <th>Value</th>
+          <th>+1</th>
+        </tr>
+      </thead>
+      <tbody id="stats-body"></tbody>
+    </table>
+
+    <h3>Skill Slots</h3>
+    <table class="skills-table" id="skills-table">
+      <thead>
+        <tr><th>Tier</th><th>Skill</th></tr>
+      </thead>
+      <tbody id="skills-body"></tbody>
+    </table>
   </div>
 
   <script>
-    const tierSets = {
-      "Guide": [
-        { range: [1, 10], primary: 1, secondary: 0.5, tertiary: 0.5, free: 1 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [26, 50], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [51, 80], primary: 2, secondary: 1.5, tertiary: 1, free: 1 },
-        { range: [81, 110], primary: 2.5, secondary: 2, tertiary: 1, free: 1 },
-        { range: [111, 140], primary: 3, secondary: 2, tertiary: 1.5, free: 2 },
-        { range: [141, 170], primary: 3, secondary: 2.5, tertiary: 2, free: 2 },
-        { range: [171, Infinity], primary: 4, secondary: 3, tertiary: 3, free: 2 }
-      ],
-      "Fisherman": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [51, 80], primary: 2, secondary: 2, tertiary: 1, free: 1 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
-        { range: [111, 140], primary: 3, secondary: 2, tertiary: 2, free: 2 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, Infinity], primary: 4, secondary: 3, tertiary: 3, free: 2 }
-      ],
-      "Spear Bearer": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 1 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
-        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2, free: 2 }
-      ],
-      "Wave Controller": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 1 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
-        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2, free: 2 }
-      ],
-      "Light Bearer": [
-        { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [51, 80], primary: 3, secondary: 1, tertiary: 1, free: 1 },
-        { range: [81, 110], primary: 3, secondary: 2, tertiary: 1, free: 1 },
-        { range: [111, 140], primary: 4, secondary: 2, tertiary: 2, free: 2 },
-        { range: [141, 170], primary: 4, secondary: 3, tertiary: 2, free: 2 },
-        { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2, free: 2 }
-      ],
-      "Anima": [
-        { range: [1, 10], primary: 2, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [11, 25], primary: 2.5, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [26, 50], primary: 3, secondary: 1, tertiary: 0.5, free: 1 },
-        { range: [51, 80], primary: 3.5, secondary: 1.5, tertiary: 1, free: 1 },
-        { range: [81, 110], primary: 4, secondary: 1.5, tertiary: 1, free: 1 },
-        { range: [111, 140], primary: 5, secondary: 2, tertiary: 1.5, free: 2 },
-        { range: [141, 170], primary: 6, secondary: 2, tertiary: 1.5, free: 2 },
-        { range: [171, Infinity], primary: 6, secondary: 2, tertiary: 2, free: 2 }
-      ]
+    const stats = ["Strength", "Shinsu Control", "Shinsu Endurance", "Perception", "Willpower", "Technique", "Insight", "Authority"];
+    const state = {
+      statValues: Object.fromEntries(stats.map(stat => [stat, 1])),
+      statHistory: [],
+      skillSlots: [],
+      availableStatPoints: 0,
+      availableSkillPoints: 0,
+      affinities: { primary: [], secondary: [], tertiary: [] }
     };
 
-    const positions = {
-      "Guide": {
-        primary: ["Perception", "Insight"],
-        secondary: ["Willpower", "Shinsu Control", "Shinsu Endurance"],
-        tertiary: ["Strength", "Technique", "Authority"]
-      },
-      "Fisherman": {
-        primary: ["Strength", "Technique", "Perception"],
-        secondary: ["Shinsu Endurance", "Insight"],
-        tertiary: ["Willpower", "Shinsu Control", "Authority"]
-      },
-      "Spear Bearer": {
-        primary: ["Strength", "Perception"],
-        secondary: ["Technique", "Insight", "Shinsu Endurance"],
-        tertiary: ["Willpower", "Shinsu Control", "Authority"]
-      },
-      "Wave Controller": {
-        primary: ["Shinsu Control", "Shinsu Endurance"],
-        secondary: ["Willpower", "Insight", "Technique"],
-        tertiary: ["Strength", "Perception", "Authority"]
-      },
-      "Light Bearer": {
-        primary: ["Insight", "Authority"],
-        secondary: ["Perception", "Shinsu Control", "Willpower"],
-        tertiary: ["Strength", "Technique", "Shinsu Endurance"]
-      },
-      "Anima": {
-        primary: ["Authority"],
-        secondary: ["Shinsu Control", "Insight", "Willpower", "Shinsu Endurance"],
-        tertiary: ["Strength", "Perception", "Technique"]
-      }
-    };
+    function renderAffinityControls() {
+      ["primary", "secondary", "tertiary"].forEach(type => {
+        const container = document.getElementById(`${type}-affinities`);
+        const select = document.getElementById(`add-${type}`);
+        container.innerHTML = "";
+        select.innerHTML = "<option value=''>+ Add</option>" + stats.map(stat => `<option value="${stat}">${stat}</option>`).join("");
 
-    const allStats = [
-      "Strength", "Shinsu Control", "Shinsu Endurance",
-      "Perception", "Willpower", "Technique", "Insight", "Authority"
-    ];
+        state.affinities[type].forEach(stat => {
+          const div = document.createElement("div");
+          div.textContent = stat;
+          div.onclick = () => {
+            state.affinities[type] = state.affinities[type].filter(s => s !== stat);
+            updateFromTextbox();
+          };
+          container.appendChild(div);
+        });
 
-    function calculateGrowth() {
-      const level = parseInt(document.getElementById("level").value);
-      const pos = document.getElementById("position").value;
-      if (isNaN(level) || level < 1) {
-        document.getElementById("result").innerHTML = "<p>Please enter a valid level.</p>";
-        return;
-      }
+        select.onchange = e => {
+          const val = e.target.value;
+          if (val && !state.affinities[type].includes(val)) {
+            state.affinities[type].push(val);
+            updateFromTextbox();
+          }
+        };
+      });
+    }
 
-      const tiers = positions[pos];
-      const tierData = tierSets[pos] || tierSets["default"];
-      let statTotals = {};
-      allStats.forEach(stat => statTotals[stat] = 0);
-      let freePoints = 0;
+    function getGrowthTable() {
+          return {
+            Guide: [
+              { range: [1, 10], primary: 1, secondary: 0.5, tertiary: 0.5 },
+              { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5 },
+              { range: [26, 50], primary: 1.5, secondary: 1, tertiary: 0.5 },
+              { range: [51, 80], primary: 2, secondary: 1.5, tertiary: 1 },
+              { range: [81, 110], primary: 2.5, secondary: 2, tertiary: 1 },
+              { range: [111, 140], primary: 3, secondary: 2, tertiary: 1.5 },
+              { range: [141, 170], primary: 3, secondary: 2.5, tertiary: 2 },
+              { range: [171, Infinity], primary: 4, secondary: 3, tertiary: 3 }
+            ],
+            Fisherman: [
+              { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5 },
+              { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5 },
+              { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5 },
+              { range: [51, 80], primary: 2, secondary: 2, tertiary: 1 },
+              { range: [81, 110], primary: 3, secondary: 2, tertiary: 1 },
+              { range: [111, 140], primary: 3, secondary: 2, tertiary: 2 },
+              { range: [141, 170], primary: 4, secondary: 3, tertiary: 2 },
+              { range: [171, Infinity], primary: 4, secondary: 3, tertiary: 3 }
+            ],
+            "Spear Bearer": [
+              { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5 },
+              { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5 },
+              { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5 },
+              { range: [51, 80], primary: 3, secondary: 1, tertiary: 1 },
+              { range: [81, 110], primary: 3, secondary: 2, tertiary: 1 },
+              { range: [111, 140], primary: 4, secondary: 2, tertiary: 2 },
+              { range: [141, 170], primary: 4, secondary: 3, tertiary: 2 },
+              { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2 }
+            ],
+            "Wave Controller": [
+              { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5 },
+              { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5 },
+              { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5 },
+              { range: [51, 80], primary: 3, secondary: 1, tertiary: 1 },
+              { range: [81, 110], primary: 3, secondary: 2, tertiary: 1 },
+              { range: [111, 140], primary: 4, secondary: 2, tertiary: 2 },
+              { range: [141, 170], primary: 4, secondary: 3, tertiary: 2 },
+              { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2 }
+            ],
+            "Light Bearer": [
+              { range: [1, 10], primary: 1, secondary: 1, tertiary: 0.5 },
+              { range: [11, 25], primary: 1.5, secondary: 1, tertiary: 0.5 },
+              { range: [26, 50], primary: 2, secondary: 1, tertiary: 0.5 },
+              { range: [51, 80], primary: 3, secondary: 1, tertiary: 1 },
+              { range: [81, 110], primary: 3, secondary: 2, tertiary: 1 },
+              { range: [111, 140], primary: 4, secondary: 2, tertiary: 2 },
+              { range: [141, 170], primary: 4, secondary: 3, tertiary: 2 },
+              { range: [171, Infinity], primary: 5, secondary: 3, tertiary: 2 }
+            ],
+            Anima: [
+              { range: [1, 10], primary: 2, secondary: 1, tertiary: 0.5 },
+              { range: [11, 25], primary: 2.5, secondary: 1, tertiary: 0.5 },
+              { range: [26, 50], primary: 3, secondary: 1, tertiary: 0.5 },
+              { range: [51, 80], primary: 3.5, secondary: 1.5, tertiary: 1 },
+              { range: [81, 110], primary: 4, secondary: 1.5, tertiary: 1 },
+              { range: [111, 140], primary: 5, secondary: 2, tertiary: 1.5 },
+              { range: [141, 170], primary: 6, secondary: 2, tertiary: 1.5 },
+              { range: [171, Infinity], primary: 6, secondary: 2, tertiary: 2 }
+            ]
+          };
+        }
+
+    function getGrowthRatesForLevel(position, level) {
+      const table = getGrowthTable()[position] || [];
+      return table.find(r => level >= r.range[0] && level <= r.range[1]) || { primary: 0, secondary: 0, tertiary: 0 };
+    }
+
+    function updateFromTextbox() {
+      const level = parseInt(document.getElementById("char-level").value);
+      const pos = document.getElementById("char-position").value;
+      const priList = state.affinities.primary;
+      const secList = state.affinities.secondary;
+      const terList = state.affinities.tertiary;
+
+      stats.forEach(stat => state.statValues[stat] = 1);
 
       for (let i = 1; i <= level; i++) {
-        const tier = tierData.find(t => i >= t.range[0] && i <= t.range[1]);
-        freePoints += tier.free;
-        tiers.primary.forEach(stat => statTotals[stat] += tier.primary);
-        tiers.secondary.forEach(stat => statTotals[stat] += tier.secondary);
-        tiers.tertiary.forEach(stat => statTotals[stat] += tier.tertiary);
+        const rates = getGrowthRatesForLevel(pos, i);
+        priList.forEach(stat => state.statValues[stat] += rates.primary / priList.length);
+        secList.forEach(stat => state.statValues[stat] += rates.secondary / secList.length);
+        terList.forEach(stat => state.statValues[stat] += rates.tertiary / terList.length);
       }
 
-      let html = `<h4>Expected Stats at Level ${level} (Position: ${pos})</h4>`;
-      html += `<table><tr><th>Stat</th><th>Expected Value</th></tr>`;
-      allStats.forEach(stat => {
-        html += `<tr><td>${stat}</td><td>${statTotals[stat].toFixed(1)}</td></tr>`;
-      });
-      html += `</table>`;
-      html += `<p style="text-align:center;"><b>Total Free Stat Points Earned:</b> ${freePoints}</p>`;
-
-      document.getElementById("result").innerHTML = html;
+      state.availableStatPoints = level - 1;
+      state.availableSkillPoints = level - 1;
+      document.getElementById("available-stat-points").value = state.availableStatPoints;
+      document.getElementById("available-skill-points").value = state.availableSkillPoints;
+      renderStats();
+      renderHpSpeed();
+      renderAffinityControls();
     }
+
+    function renderStats() {
+      const tbody = document.getElementById("stats-body");
+      tbody.innerHTML = "";
+      const average = stats.reduce((sum, stat) => sum + state.statValues[stat], 0) / stats.length;
+      const max = parseFloat(document.getElementById("stat-multiplier").value) * average;
+
+      stats.forEach(stat => {
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        td1.textContent = stat;
+        const td2 = document.createElement("td");
+        td2.textContent = state.statValues[stat].toFixed(1);
+        const td3 = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "+";
+        btn.onclick = () => {
+          if (state.availableStatPoints > 0 && state.statValues[stat] + 1 <= Math.floor(max)) {
+            state.statValues[stat]++;
+            state.availableStatPoints--;
+            renderStats();
+            document.getElementById("available-stat-points").value = state.availableStatPoints;
+            renderHpSpeed();
+          }
+        };
+        td3.appendChild(btn);
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderHpSpeed() {
+      const floor = parseInt(document.getElementById("char-floor").value);
+      const level = parseInt(document.getElementById("char-level").value);
+      const se = state.statValues["Shinsu Endurance"];
+      const str = state.statValues["Strength"];
+      const wp = state.statValues["Willpower"];
+
+      const movePenalty = Math.max(0, 2 * floor - se);
+      const speed = 6 + level - movePenalty;
+
+      let hpMultiplier = 2 + Math.floor(level / 25);
+      const hp = 3 * se + 2 * str + 1.5 * wp + level * hpMultiplier;
+
+      document.getElementById("hp-speed").innerHTML = `<b>HP:</b> ${Math.round(hp)}<br><b>Movement Speed:</b> ${speed}`;
+    }
+
+    function addSkillPoint() {
+      state.availableSkillPoints++;
+      document.getElementById("available-skill-points").value = state.availableSkillPoints;
+    }
+
+    function levelUp() {
+      document.getElementById("char-level").value++;
+      updateFromTextbox();
+    }
+
+    function addSkillSlot(tier) {
+      state.skillSlots.push({ tier: tier, name: "" });
+      state.skillSlots.sort((a, b) => a.tier - b.tier);
+      renderSkills();
+    }
+
+    function renderSkills() {
+      const tbody = document.getElementById("skills-body");
+      tbody.innerHTML = "";
+      state.skillSlots.forEach((slot, index) => {
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        td1.textContent = `Tier ${slot.tier}`;
+        const td2 = document.createElement("td");
+        const input = document.createElement("input");
+        input.value = slot.name;
+        input.onchange = e => state.skillSlots[index].name = e.target.value;
+        td2.appendChild(input);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Initialize
+    renderAffinityControls();
+    updateFromTextbox();
+    renderSkills();
   </script>
 </body>
 </html>
